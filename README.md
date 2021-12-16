@@ -1,4 +1,4 @@
-Library using Matplotlib for quickly plotting with just 1 line of code by parameterizing Matplotlib commands. In addition, plots will always have consistent formatting.
+Library for quickly plotting with just 1 line of code by parameterizing Matplotlib commands. In addition, plots will always have consistent formatting.
 
 # Plot example:
 

@@ -24,12 +24,12 @@ axisTitle_FontSize = 16
 axisTickLabel_FontSize = 14
 legend_fontSize = 16
 fig_directory = "figures"
-figure_filetype = "pdf"
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
 def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			figure_filename="myfig",
+			figure_filetype="pdf",
 			title_label=" ",
 			markers=False,
 			ndata=1,

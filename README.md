@@ -1,5 +1,7 @@
+# Quick Plotting Library
+
 Library for quickly plotting with just 1 line of code by parameterizing Matplotlib commands. In addition, plots will always have consistent formatting.
 
-# Plot example:
+## Examples:
 
-![Quickplotlib example](https://raw.githubusercontent.com/jbrillon/quickplotlib/master/examples/figures/example_01.png)
+<img src="https://raw.githubusercontent.com/jbrillon/quickplotlib/master/examples/figures/example_01.png" width="60%"></img>

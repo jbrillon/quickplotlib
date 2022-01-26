@@ -16,7 +16,7 @@ from matplotlib import rc as matplotlibrc
 matplotlibrc('text.latex', preamble='\usepackage{color}')
 matplotlibrc('text', usetex=True)
 matplotlibrc('font', family='serif')
-clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown']
+clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']
 mrkr = ['o','s','^','d','v','>','<']
 lnstl = ['solid','dashed','dashdot','dotted']
 # Font sizes
@@ -32,7 +32,6 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			figure_filetype="pdf",
 			title_label=" ",
 			markers=False,
-			ndata=1,
 			legend_labels_tex=[],
 			black_lines=False,
 			xlimits=[],ylimits=[],
@@ -43,6 +42,15 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			nlegendcols=1,legend_on=True,legend_inside=True,
 			remove_vertical_asymptotes_on_curve_number=[]):
 	print("---------------------------------------------")
+	#-----------------------------------------------------
+	# determine if plotting more than one curve
+	#-----------------------------------------------------
+	if(hasattr(xdata[0],'__len__')):
+		# then multiple curves
+		ndata = int(len(xdata))
+	else:
+		# single curve
+		ndata = int(1)
 	#-----------------------------------------------------
 	# pre-plotting data manipulation:
 	#-----------------------------------------------------

@@ -38,6 +38,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			log_axes=None,
 			error_bars_on_curve_number=[],
 			yerr_above=[],yerr_below=[],
+			which_lines_black=[],
 			which_lines_dashed=[],
 			nlegendcols=1,legend_on=True,legend_inside=True,
 			remove_vertical_asymptotes_on_curve_number=[]):
@@ -85,14 +86,21 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 	lc = clr[0] # default line color (lc)
 	if(black_lines):
 		lc = 'k' # set color to black
-		
+	
+	color_index_shift = 0
 	if(ndata>1):
 		leg_elements = []
 		for i in range(0,ndata):
 			if(black_lines):
 				ls = lnstl[i]
 			else:
-				lc = clr[i]
+				if(i in which_lines_black):
+					lc = 'k'
+					color_index_shift += 1
+				else:
+					lc = clr[i-color_index_shift]
+					# warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
+					#          -- no issues when only one black line is specified
 				if(i in which_lines_dashed):
 					ls = "dashed"
 				else:

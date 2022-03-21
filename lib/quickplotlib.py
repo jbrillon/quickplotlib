@@ -27,6 +27,10 @@ fig_directory = "figures"
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
+def plot_any_axes(func,x,y,lc,mk,ls):
+	# abstract plotting function to handle any kind of axes
+	return func(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+#-----------------------------------------------------
 def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			figure_filename="myfig",
 			figure_filetype="pdf",
@@ -117,6 +121,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 					ls = lnstl[0]
 			x = xdata[i]; y = ydata[i];
 			if(markers):
+				mk = mrkr[i]
 				if(log_axes==None):
 					if(error_bars_on_curve_number!=[] and i==error_bars_on_curve_number):
 						yerr = np.array([yerr_below,yerr_above])
@@ -124,47 +129,38 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 						plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
 						# plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
 					else:
-						plt.plot(x, y, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle=ls)
-				elif(log_axes=="both"):
-					plt.loglog(x, y, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle=ls)
-				elif(log_axes=="x"):
-					plt.semilogx(x, y, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle=ls)
-				elif(log_axes=="y"):
-					plt.semilogy(x, y, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle=ls)
-				leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mrkr[i], markersize=6, mfc='None',linestyle=ls))
-			else:
-				leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+						plot_any_axes(plt.plot,x,y,lc,mk,ls)
+			
+			# add legend element 
+			leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+			
+			# plot command
 			if(log_axes==None):
-				plt.plot(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+				plot_any_axes(plt.plot,x,y,lc,mk,ls)
 			elif(log_axes=="both"):
-				plt.loglog(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+				plot_any_axes(plt.loglog,x,y,lc,mk,ls)
 			elif(log_axes=="x"):
-				plt.semilogx(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+				plot_any_axes(plt.semilogx,x,y,lc,mk,ls)
 			elif(log_axes=="y"):
-				plt.semilogy(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+				plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
 		if(legend_on):
 			if(legend_inside):
 				leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
 			else:
 				leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
-	else:
+	else: # plot 1 curve -- no legend
 		if(markers):
-			if(log_axes==None):
-				plt.plot(xdata, ydata, color=lc, marker=mrkr[0], markersize=6, mfc='None', linestyle='None')
-			elif(log_axes=="both"):
-				plt.loglog(xdata, ydata, color=lc, marker=mrkr[0], markersize=6, mfc='None', linestyle='None')
-			elif(log_axes=="x"):
-				plt.semilogx(xdata, ydata, color=lc, marker=mrkr[0], markersize=6, mfc='None', linestyle='None')
-			elif(log_axes=="y"):
-				plt.semilogy(xdata, ydata, color=lc, marker=mrkr[0], markersize=6, mfc='None', linestyle='None')
+			mk=mrkr[0]
+		if(which_lines_only_markers != []):
+			ls='None' # no lines
 		if(log_axes==None):
-			plt.plot(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+			plot_any_axes(plt.plot,x,y,lc,mk,ls)
 		elif(log_axes=="both"):
-			plt.loglog(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+			plot_any_axes(plt.loglog,x,y,lc,mk,ls)
 		elif(log_axes=="x"):
-			plt.semilogx(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+			plot_any_axes(plt.semilogx,x,y,lc,mk,ls)
 		elif(log_axes=="y"):
-			plt.semilogy(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+			plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
 	plt.tight_layout()
 	print('\t ... Saving figure ...')
 	plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

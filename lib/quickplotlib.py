@@ -8,6 +8,8 @@
 import numpy as np # NumPy: contains basic numerical routines
 import scipy # SciPy: contains additional numerical routines to numpy
 import matplotlib.pyplot as plt # Matlab-like plotting
+import matplotlib.colors as colors # needed for sparsity pattern
+import matplotlib # needed for the sparsity pattern code
 #-----------------------------------------------------
 # plotting essentials
 #-----------------------------------------------------
@@ -167,3 +169,60 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 	plt.close()
 	print('\t     Saved.')
 	print("---------------------------------------------")
+#-----------------------------------------------------
+#=====================================================
+# set the colormap and centre the colorbar
+class MidpointNormalize(colors.Normalize):
+	"""
+	Normalise the colorbar so that diverging bars work there way either side from a prescribed midpoint value)
+
+	e.g. im=ax1.imshow(array, norm=MidpointNormalize(midpoint=0.,vmin=-100, vmax=100))
+	"""
+	def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+		self.midpoint = midpoint
+		colors.Normalize.__init__(self, vmin, vmax, clip)
+
+	def __call__(self, value, clip=None):
+		# I'm ignoring masked values and all kinds of edge cases to make a
+		# simple example...
+		x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+		return np.ma.masked_array(np.interp(value, x, y), np.isnan(value))
+#-----------------------------------------------------
+def plot_matrix_sparsity_pattern(A=np.random.random((6,6)),
+								 colour_toggle='y',
+								 cutOff=0.01,
+								 figure_filename = "spy",
+								 figure_filetype = 'pdf'
+								 ):
+	print('-----------------------------------------------------')
+	# get matrix A number of rows and columns
+	nRow, nCol = A.shape
+
+	# Plot
+	figure_title = "Sparsity Pattern, Matrix Size: %ix%i" % (nRow,nCol)
+	figure_title_print = "Sparsity Pattern, Matrix Size: %ix%i" % (nRow,nCol)
+	print('Plotting: ' + figure_title_print)
+	fig = plt.figure(figure_title)
+	plt.title(figure_title)
+
+	if colour_toggle == 'y': # Plot in colour
+		elev_min=np.min(A)
+		elev_max=np.max(A)
+		mid_val=0
+		cmap=matplotlib.cm.RdBu_r
+		plt.imshow(A, cmap=cmap, clim=(elev_min, elev_max), norm=MidpointNormalize(midpoint=mid_val,vmin=elev_min, vmax=elev_max))
+		plt.colorbar(label='Operator Weights')
+	elif colour_toggle == 'n': # Plot black and white without color bar
+		# plt.spy(A,precision=0.001,markersize=5,color='k')
+		plt.spy(A,precision=cutOff,markersize=int(25.0*9.0/min(nRow,nCol)),color='k')
+
+	plt.xticks(np.arange(-0.5,nCol),0*range(0, nCol+1))
+	plt.yticks(np.arange(-0.5,nRow),0*range(0, nRow+1))
+	plt.grid(linewidth=0.001)
+	plt.tight_layout()
+	print('\t ... Saving figure ...')
+	plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)
+	plt.close()
+	print('\t     Saved.')
+	print('-----------------------------------------------------')
+#=====================================================

@@ -41,7 +41,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			which_lines_black=[],
 			which_lines_dashed=[],
 			nlegendcols=1,legend_on=True,legend_inside=True,
-			remove_vertical_asymptotes_on_curve_number=[]):
+			remove_vertical_asymptotes_on_curve_number=[],
+			which_lines_only_markers=[]):
 	print("---------------------------------------------")
 	#-----------------------------------------------------
 	# determine if plotting more than one curve
@@ -84,6 +85,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 		ax.set_ylim(ylimits)
 	ls = lnstl[0]  # default line style (ls)
 	lc = clr[0] # default line color (lc)
+	mk = 'None'
 	if(black_lines):
 		lc = 'k' # set color to black
 	
@@ -93,6 +95,10 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 		for i in range(0,ndata):
 			if(black_lines):
 				ls = lnstl[i]
+				mk = 'None' # reset to default
+				if(i in which_lines_only_markers):
+					ls = 'None'
+					mk = mrkr[i]
 			else:
 				if(i in which_lines_black):
 					lc = 'k'
@@ -101,8 +107,12 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 					lc = clr[i-color_index_shift]
 					# warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
 					#          -- no issues when only one black line is specified
+				mk = 'None' # reset to default
 				if(i in which_lines_dashed):
 					ls = "dashed"
+				elif(i in which_lines_only_markers):
+					ls = 'None'
+					mk = mrkr[i]
 				else:
 					ls = lnstl[0]
 			x = xdata[i]; y = ydata[i];
@@ -123,15 +133,15 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 					plt.semilogy(x, y, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle=ls)
 				leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mrkr[i], markersize=6, mfc='None',linestyle=ls))
 			else:
-				leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, linestyle=ls))
+				leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
 			if(log_axes==None):
-				plt.plot(x, y, color=lc, linestyle=ls)
+				plt.plot(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 			elif(log_axes=="both"):
-				plt.loglog(x, y, color=lc, linestyle=ls)
+				plt.loglog(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 			elif(log_axes=="x"):
-				plt.semilogx(x, y, color=lc, linestyle=ls)
+				plt.semilogx(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 			elif(log_axes=="y"):
-				plt.semilogy(x, y, color=lc, linestyle=ls)
+				plt.semilogy(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 		if(legend_on):
 			if(legend_inside):
 				leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
@@ -148,13 +158,13 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
 			elif(log_axes=="y"):
 				plt.semilogy(xdata, ydata, color=lc, marker=mrkr[0], markersize=6, mfc='None', linestyle='None')
 		if(log_axes==None):
-			plt.plot(xdata, ydata, color=lc, linestyle=ls)
+			plt.plot(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 		elif(log_axes=="both"):
-			plt.loglog(xdata, ydata, color=lc, linestyle=ls)
+			plt.loglog(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 		elif(log_axes=="x"):
-			plt.semilogx(xdata, ydata, color=lc, linestyle=ls)
+			plt.semilogx(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 		elif(log_axes=="y"):
-			plt.semilogy(xdata, ydata, color=lc, linestyle=ls)
+			plt.semilogy(xdata, ydata, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 	plt.tight_layout()
 	print('\t ... Saving figure ...')
 	plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

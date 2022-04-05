@@ -21,15 +21,15 @@ y2 = np.cos(x)
 y3 = 1.0/np.sin(x) # csc(x)
 y4 = 1.0/np.cos(x) # sec(x)
 plotfxn(xdata=[x,x,x,x],
-		ydata=[y1,y2,y3,y4],
-		ylabel='$y$',
-		xlabel='$x$',
-		figure_filename='example_01',
-		figure_filetype="png",
-		title_label='Trigonometric Functions',
-		legend_labels_tex=['$\\sin(x)$','$\\cos(x)$','$\\csc(x)$','$\\sec(x)$'],
-		black_lines=False,
-		xlimits=[0,2*np.pi],ylimits=[-2,2],
-		which_lines_dashed=[2,3],
-		remove_vertical_asymptotes_on_curve_number=[2,3])
+        ydata=[y1,y2,y3,y4],
+        ylabel='$y$',
+        xlabel='$x$',
+        figure_filename='example_01',
+        figure_filetype="png",
+        title_label='Trigonometric Functions',
+        legend_labels_tex=['$\\sin(x)$','$\\cos(x)$','$\\csc(x)$','$\\sec(x)$'],
+        black_lines=False,
+        xlimits=[0,2*np.pi],ylimits=[-2,2],
+        which_lines_dashed=[2,3],
+        remove_vertical_asymptotes_on_curve_number=[2,3])
 #-----------------------------------------------------

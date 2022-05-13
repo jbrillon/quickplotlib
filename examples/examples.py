@@ -7,7 +7,6 @@
 #-----------------------------------------------------
 # import libraries
 import numpy as np # NumPy: contains basic numerical routines
-# import easyplotlib
 import sys
 sys.path.append('../lib/')
 from quickplotlib import plotfxn

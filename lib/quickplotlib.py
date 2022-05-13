@@ -15,7 +15,7 @@ import matplotlib # needed for the sparsity pattern code
 #-----------------------------------------------------
 from matplotlib.lines import Line2D
 from matplotlib import rc as matplotlibrc
-matplotlibrc('text.latex', preamble='\usepackage{color}')
+matplotlibrc('text.latex', preamble='\\usepackage{color}')
 matplotlibrc('text', usetex=True)
 matplotlibrc('font', family='serif')
 clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']

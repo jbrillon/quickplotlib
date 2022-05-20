@@ -216,8 +216,8 @@ def plot_matrix_sparsity_pattern(A=np.random.random((6,6)),
         # plt.spy(A,precision=0.001,markersize=5,color='k')
         plt.spy(A,precision=cutOff,markersize=int(25.0*9.0/min(nRow,nCol)),color='k')
 
-    plt.xticks(np.arange(-0.5,nCol),0*range(0, nCol+1))
-    plt.yticks(np.arange(-0.5,nRow),0*range(0, nRow+1))
+    plt.xticks(np.arange(-0.5,nCol),0*list(range(0, nCol+1)))
+    plt.yticks(np.arange(-0.5,nRow),0*list(range(0, nRow+1)))
     plt.grid(linewidth=0.001)
     plt.tight_layout()
     print('\t ... Saving figure ...')

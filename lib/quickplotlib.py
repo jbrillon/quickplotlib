@@ -51,14 +51,11 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             which_lines_only_markers=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
-    # determine if plotting more than one curve
+    # determine number of curves
     #-----------------------------------------------------
     if(hasattr(xdata[0],'__len__')):
         # then multiple curves
         ndata = int(len(xdata))
-    else:
-        # single curve
-        ndata = int(1)
     #-----------------------------------------------------
     # pre-plotting data manipulation:
     #-----------------------------------------------------
@@ -74,7 +71,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     #-----------------------------------------------------
     # plotting:
     #-----------------------------------------------------
-    print('Plotting: ' + figure_filename)
+    print('Plotting: ' + fig_directory + "/" + figure_filename + "." + figure_filetype)
     if(legend_inside):
         fig, ax = plt.subplots(figsize=(6,6))
     else:
@@ -96,65 +93,47 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         lc = 'k' # set color to black
     
     color_index_shift = 0
-    if(ndata>1):
-        leg_elements = []
-        for i in range(0,ndata):
-            if(black_lines):
-                ls = lnstl[i]
-                mk = 'None' # reset to default
-                if(i in which_lines_only_markers):
-                    ls = 'None'
-                    mk = mrkr[i]
-            else:
-                if(i in which_lines_black):
-                    lc = 'k'
-                    color_index_shift += 1
-                else:
-                    lc = clr[i-color_index_shift]
-                    # warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
-                    #          -- no issues when only one black line is specified
-                mk = 'None' # reset to default
-                if(i in which_lines_dashed):
-                    ls = "dashed"
-                elif(i in which_lines_only_markers):
-                    ls = 'None'
-                    mk = mrkr[i]
-                else:
-                    ls = lnstl[0]
-            x = xdata[i]; y = ydata[i];
-            if(markers):
+    leg_elements = []
+
+    for i in range(0,ndata):
+        if(black_lines):
+            ls = lnstl[i]
+            mk = 'None' # reset to default
+            if(i in which_lines_only_markers):
+                ls = 'None'
                 mk = mrkr[i]
-                if(log_axes==None):
-                    if(error_bars_on_curve_number!=[] and i==error_bars_on_curve_number):
-                        yerr = np.array([yerr_below,yerr_above])
-                        fmt_string = lc+mrkr[i]
-                        plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
-                        # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
-                    else:
-                        plot_any_axes(plt.plot,x,y,lc,mk,ls)
-            
-            # add legend element 
-            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
-            
-            # plot command
-            if(log_axes==None):
-                plot_any_axes(plt.plot,x,y,lc,mk,ls)
-            elif(log_axes=="both"):
-                plot_any_axes(plt.loglog,x,y,lc,mk,ls)
-            elif(log_axes=="x"):
-                plot_any_axes(plt.semilogx,x,y,lc,mk,ls)
-            elif(log_axes=="y"):
-                plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
-        if(legend_on):
-            if(legend_inside):
-                leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+        else:
+            if(i in which_lines_black):
+                lc = 'k'
+                color_index_shift += 1
             else:
-                leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
-    else: # plot 1 curve -- no legend
+                lc = clr[i-color_index_shift]
+                # warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
+                #          -- no issues when only one black line is specified
+            mk = 'None' # reset to default
+            if(i in which_lines_dashed):
+                ls = "dashed"
+            elif(i in which_lines_only_markers):
+                ls = 'None'
+                mk = mrkr[i]
+            else:
+                ls = lnstl[0]
+        x = xdata[i]; y = ydata[i];
         if(markers):
-            mk=mrkr[0]
-        if(which_lines_only_markers != []):
-            ls='None' # no lines
+            mk = mrkr[i]
+            if(log_axes==None):
+                if(error_bars_on_curve_number!=[] and i==error_bars_on_curve_number):
+                    yerr = np.array([yerr_below,yerr_above])
+                    fmt_string = lc+mrkr[i]
+                    plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
+                    # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
+                else:
+                    plot_any_axes(plt.plot,x,y,lc,mk,ls)
+        
+        # add legend element 
+        leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+        
+        # plot command
         if(log_axes==None):
             plot_any_axes(plt.plot,x,y,lc,mk,ls)
         elif(log_axes=="both"):
@@ -163,6 +142,11 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             plot_any_axes(plt.semilogx,x,y,lc,mk,ls)
         elif(log_axes=="y"):
             plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
+    if(legend_on):
+        if(legend_inside):
+            leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+        else:
+            leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
     plt.tight_layout()
     print('\t ... Saving figure ...')
     plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

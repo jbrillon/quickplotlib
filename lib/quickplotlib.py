@@ -48,7 +48,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             which_lines_dashed=[],
             nlegendcols=1,legend_on=True,legend_inside=True,
             remove_vertical_asymptotes_on_curve_number=[],
-            which_lines_only_markers=[]):
+            which_lines_only_markers=[],
+            figure_size=(6,6)):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # determine number of curves
@@ -73,7 +74,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     #-----------------------------------------------------
     print('Plotting: ' + fig_directory + "/" + figure_filename + "." + figure_filetype)
     if(legend_inside):
-        fig, ax = plt.subplots(figsize=(6,6))
+        fig, ax = plt.subplots(figsize=figure_size)
+        # fig, ax = plt.subplots(figsize=(8,6))
     else:
         fig, ax = plt.subplots(figsize=(9,6))
     plt.grid()

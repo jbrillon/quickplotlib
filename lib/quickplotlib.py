@@ -49,7 +49,10 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             nlegendcols=1,legend_on=True,legend_inside=True,
             remove_vertical_asymptotes_on_curve_number=[],
             which_lines_only_markers=[],
-            figure_size=(6,6)):
+            figure_size=(6,6),
+            transparent_legend=False,
+            legend_border_on=True,
+            grid_lines_on=True):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # determine number of curves
@@ -78,7 +81,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         # fig, ax = plt.subplots(figsize=(8,6))
     else:
         fig, ax = plt.subplots(figsize=(9,6))
-    plt.grid()
+    if(grid_lines_on):
+        plt.grid()
     ax.set_xlabel(xlabel,fontsize=axisTitle_FontSize)
     ax.set_ylabel(ylabel,rotation=90,fontsize=axisTitle_FontSize)
     if(title_label!=" "):
@@ -146,9 +150,11 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
     if(legend_on):
         if(legend_inside):
-            leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit',frameon=legend_border_on)
         else:
-            leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit',frameon=legend_border_on)
+        if(transparent_legend):
+            leg.get_frame().set_facecolor('none')
     plt.tight_layout()
     print('\t ... Saving figure ...')
     plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

@@ -25,7 +25,6 @@ lnstl = ['solid','dashed','dashdot','dotted']
 axisTitle_FontSize = 16
 axisTickLabel_FontSize = 14
 legend_fontSize = 16
-fig_directory = "figures"
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
@@ -52,8 +51,16 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             figure_size=(6,6),
             transparent_legend=False,
             legend_border_on=True,
-            grid_lines_on=True):
+            grid_lines_on=True,
+            fig_directory = "figures"):
     print("---------------------------------------------")
+    #-----------------------------------------------------
+    # Safeguard for when empty data is passed
+    #-----------------------------------------------------
+    if(xdata==[] or ydata==[]):
+        print("quickplotlib error: x or y data is empty")
+        print("aborting...")
+        return
     #-----------------------------------------------------
     # determine number of curves
     #-----------------------------------------------------

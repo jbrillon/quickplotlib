@@ -225,3 +225,61 @@ def plot_matrix_sparsity_pattern(A=np.random.random((6,6)),
     print('\t     Saved.')
     print('-----------------------------------------------------')
 #=====================================================
+#-----------------------------------------------------
+def plotfield(xdata=[],ydata=[],udata=[],vdata=[],
+            ylabel="y",xlabel="x",
+            figure_filename="myfig",
+            figure_filetype="pdf",
+            title_label=" ",
+            xlimits=[],ylimits=[],
+            figure_size=(6,6),
+            grid_lines_on=False,
+            fig_directory = ".",
+            black_lines=True):
+    print("---------------------------------------------")
+    #-----------------------------------------------------
+    # Safeguard for when empty data is passed
+    #-----------------------------------------------------
+    if(xdata==[] or ydata==[] or udata==[] or vdata==[]):
+        print("quickplotlib error: x, y, u, or v data is empty")
+        print("aborting...")
+        return
+    #-----------------------------------------------------
+    # determine number of curves
+    #-----------------------------------------------------
+    if(hasattr(xdata[0],'__len__')):
+        # then multiple curves
+        ndata = int(len(xdata))
+        print("quickplotlib error: %i sets of data were passed to quiver(), cannot pass more than 1")
+        print("aborting...")
+        return
+    #-----------------------------------------------------
+    # plotting:
+    #-----------------------------------------------------
+    print('Plotting: ' + fig_directory + "/" + figure_filename + "." + figure_filetype)
+    fig, ax = plt.subplots(figsize=figure_size)
+    if(grid_lines_on):
+        plt.grid()
+    ax.set_xlabel(xlabel,fontsize=axisTitle_FontSize)
+    ax.set_ylabel(ylabel,rotation=90,fontsize=axisTitle_FontSize)
+    if(title_label!=" "):
+        plt.title(title_label,fontsize=axisTitle_FontSize)
+    plt.setp(ax.get_xticklabels(),fontsize=axisTickLabel_FontSize); plt.setp(ax.get_yticklabels(),fontsize=axisTickLabel_FontSize);
+    if(xlimits!=[]):
+        ax.set_xlim(xlimits)
+    if(ylimits!=[]):
+        ax.set_ylim(ylimits)
+    lc = clr[0] # default line color (lc)
+    if(black_lines):
+        lc = 'k' # set color to black
+    # quiver plot
+    ax.quiver(xdata, ydata, udata, vdata, color=lc)
+
+    plt.tight_layout()
+    print('\t ... Saving figure ...')
+    plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)
+    plt.close()
+    print('\t     Saved.')
+    print("---------------------------------------------")
+#-----------------------------------------------------
+#=====================================================

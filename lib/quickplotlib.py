@@ -156,6 +156,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         elif(log_axes=="y"):
             plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
     if(legend_on):
+        if(not transparent_legend):
+            legend_border_on=True
         if(legend_inside):
             leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit',frameon=legend_border_on)
         else:

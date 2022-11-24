@@ -65,8 +65,11 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     # determine number of curves
     #-----------------------------------------------------
     if(hasattr(xdata[0],'__len__')):
-        # then multiple curves
+        # then lists were passed, single or multiple curves
         ndata = int(len(xdata))
+    else:
+        # then numpy array was passed, single curve
+        ndata=1; xdata=[xdata]; ydata=[ydata]
     #-----------------------------------------------------
     # pre-plotting data manipulation:
     #-----------------------------------------------------
@@ -144,7 +147,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                     plot_any_axes(plt.plot,x,y,lc,mk,ls)
         
         # add legend element 
-        leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+        if(legend_labels_tex!=[]):
+            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
         
         # plot command
         if(log_axes==None):

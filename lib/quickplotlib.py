@@ -48,6 +48,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             nlegendcols=1,legend_on=True,legend_inside=True,
             remove_vertical_asymptotes_on_curve_number=[],
             which_lines_only_markers=[],
+            which_lines_markers=[],
             figure_size=(6,6),
             transparent_legend=False,
             legend_border_on=True,
@@ -118,6 +119,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             if(i in which_lines_only_markers):
                 ls = 'None'
                 mk = mrkr[i]
+            elif(i in which_lines_markers):
+                mk = mrkr[i]
         else:
             if(i in which_lines_black):
                 lc = 'k'
@@ -131,6 +134,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                 ls = "dashed"
             elif(i in which_lines_only_markers):
                 ls = 'None'
+                mk = mrkr[i]
+            elif(i in which_lines_markers):
                 mk = mrkr[i]
             else:
                 ls = lnstl[0]

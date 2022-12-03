@@ -146,6 +146,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                 mk = mrkr[i]
             elif(i in which_lines_markers):
                 mk = mrkr[i]
+            elif(lnstl_input!=[]):
+                ls = lnstl[i]
             else:
                 ls = lnstl[0]
         x = xdata[i]; y = ydata[i];

@@ -18,6 +18,7 @@ from matplotlib import rc as matplotlibrc
 matplotlibrc('text.latex', preamble='\\usepackage{color}')
 matplotlibrc('text', usetex=True)
 matplotlibrc('font', family='serif')
+global clr, mrkr, lnstl
 clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']
 mrkr = ['o','s','^','d','v','>','<']
 lnstl = ['solid','dashed','dashdot','dotted']
@@ -53,7 +54,9 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             transparent_legend=False,
             legend_border_on=True,
             grid_lines_on=True,
-            fig_directory = "figures"):
+            fig_directory = "figures",
+            clr_input=[],mrkr_input=[],lnstl_input=[]):
+    global clr, mrkr, lnstl
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -71,6 +74,12 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     else:
         # then numpy array was passed, single curve
         ndata=1; xdata=[xdata]; ydata=[ydata]
+    if(clr_input!=[]):
+        clr = clr_input
+    if(mrkr_input!=[]):
+        mrkr = mrkr_input
+    if(lnstl_input!=[]):
+        lnstl = lnstl_input
     #-----------------------------------------------------
     # pre-plotting data manipulation:
     #-----------------------------------------------------

@@ -131,25 +131,37 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             elif(i in which_lines_markers):
                 mk = mrkr[i]
         else:
-            if(i in which_lines_black):
+            # colour
+            if(clr_input!=[]):
+                lc = clr[i]
+            elif(i in which_lines_black):
                 lc = 'k'
                 color_index_shift += 1
             else:
                 lc = clr[i-color_index_shift]
                 # warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
                 #          -- no issues when only one black line is specified
-            mk = 'None' # reset to default
-            if(i in which_lines_dashed):
+            
+            # linestyle
+            if(lnstl_input!=[]):
+                ls = lnstl[i]
+            elif(i in which_lines_dashed):
                 ls = "dashed"
             elif(i in which_lines_only_markers):
                 ls = 'None'
+            else:
+                ls = 'solid' # default
+            
+            # markers
+            if(mrkr_input!=[]):
+                mk = mrkr[i]
+            elif(i in which_lines_only_markers):
                 mk = mrkr[i]
             elif(i in which_lines_markers):
                 mk = mrkr[i]
-            elif(lnstl_input!=[]):
-                ls = lnstl[i]
             else:
-                ls = lnstl[0]
+                mk = 'None' # reset to default
+                
         x = xdata[i]; y = ydata[i];
         if(markers):
             mk = mrkr[i]

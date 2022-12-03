@@ -19,9 +19,6 @@ matplotlibrc('text.latex', preamble='\\usepackage{color}')
 matplotlibrc('text', usetex=True)
 matplotlibrc('font', family='serif')
 global clr, mrkr, lnstl
-clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']
-mrkr = ['o','s','^','d','v','>','<']
-lnstl = ['solid','dashed','dashdot','dotted']
 # Font sizes
 axisTitle_FontSize = 16
 axisTickLabel_FontSize = 14
@@ -74,12 +71,24 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     else:
         # then numpy array was passed, single curve
         ndata=1; xdata=[xdata]; ydata=[ydata]
+    #-----------------------------------------------------
+    # colors, markers, and linestyles
+    #-----------------------------------------------------
+    # color
     if(clr_input!=[]):
         clr = clr_input
+    else:
+        clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']
+    # markers
     if(mrkr_input!=[]):
         mrkr = mrkr_input
+    else:
+        mrkr = ['o','s','^','d','v','>','<']
+    # linestyles
     if(lnstl_input!=[]):
         lnstl = lnstl_input
+    else:
+        lnstl = ['solid','dashed','dashdot','dotted']
     #-----------------------------------------------------
     # pre-plotting data manipulation:
     #-----------------------------------------------------
@@ -118,7 +127,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     if(black_lines):
         lc = 'k' # set color to black
     
-    color_index_shift = 0
+    color_index_shift = 0 
     leg_elements = []
 
     for i in range(0,ndata):
@@ -161,7 +170,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                 mk = mrkr[i]
             else:
                 mk = 'None' # reset to default
-                
+
         x = xdata[i]; y = ydata[i];
         if(markers):
             mk = mrkr[i]

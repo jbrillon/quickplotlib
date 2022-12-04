@@ -18,11 +18,6 @@ from matplotlib import rc as matplotlibrc
 matplotlibrc('text.latex', preamble='\\usepackage{color}')
 matplotlibrc('text', usetex=True)
 matplotlibrc('font', family='serif')
-global clr, mrkr, lnstl
-# Font sizes
-axisTitle_FontSize = 16
-axisTickLabel_FontSize = 14
-legend_fontSize = 16
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
@@ -52,8 +47,10 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             legend_border_on=True,
             grid_lines_on=True,
             fig_directory = "figures",
-            clr_input=[],mrkr_input=[],lnstl_input=[]):
-    global clr, mrkr, lnstl
+            clr_input=[],mrkr_input=[],lnstl_input=[],
+            axisTitle_FontSize=16,
+            axisTickLabel_FontSize=14,
+            legend_fontSize=16):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -278,7 +275,11 @@ def plotfield(xdata=[],ydata=[],udata=[],vdata=[],
             figure_size=(6,6),
             grid_lines_on=False,
             fig_directory = ".",
-            black_lines=True):
+            black_lines=True,
+            clr_input=[],mrkr_input=[],lnstl_input=[],
+            axisTitle_FontSize=16,
+            axisTickLabel_FontSize=14,
+            legend_fontSize=16):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -296,6 +297,24 @@ def plotfield(xdata=[],ydata=[],udata=[],vdata=[],
         print("quickplotlib error: %i sets of data were passed to quiver(), cannot pass more than 1")
         print("aborting...")
         return
+    #-----------------------------------------------------
+    # colors, markers, and linestyles
+    #-----------------------------------------------------
+    # color
+    if(clr_input!=[]):
+        clr = clr_input
+    else:
+        clr = ['tab:blue','tab:red','tab:green','tab:orange','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan']
+    # markers
+    if(mrkr_input!=[]):
+        mrkr = mrkr_input
+    else:
+        mrkr = ['o','s','^','d','v','>','<']
+    # linestyles
+    if(lnstl_input!=[]):
+        lnstl = lnstl_input
+    else:
+        lnstl = ['solid','dashed','dashdot','dotted']
     #-----------------------------------------------------
     # plotting:
     #-----------------------------------------------------

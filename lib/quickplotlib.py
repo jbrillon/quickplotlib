@@ -50,7 +50,9 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             clr_input=[],mrkr_input=[],lnstl_input=[],
             axisTitle_FontSize=16,
             axisTickLabel_FontSize=14,
-            legend_fontSize=16):
+            legend_fontSize=16,
+            legend_location="best",
+            legend_anchor=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -194,14 +196,23 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         elif(log_axes=="y"):
             plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
     if(legend_on):
-        if(not transparent_legend):
-            legend_border_on=True
         if(legend_inside):
-            leg = plt.legend(handles=leg_elements, loc="best", ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit',frameon=legend_border_on)
+            if(legend_anchor!=[]):
+                leg = plt.legend(handles=leg_elements, loc=legend_location, bbox_to_anchor=(legend_anchor[0], legend_anchor[1]), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            else:
+                leg = plt.legend(handles=leg_elements, loc=legend_location, ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
         else:
-            leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit',frameon=legend_border_on)
+            leg = plt.legend(handles=leg_elements, loc="upper center", bbox_to_anchor=(1.2, 1.0), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
         if(transparent_legend):
-            leg.get_frame().set_facecolor('none')
+            leg.get_frame().set_facecolor('None')
+        else:
+            leg.get_frame().set_facecolor('w')
+        if(not legend_border_on):
+            leg.get_frame().set_edgecolor('w')
+            leg.get_frame().set_linewidth(0.0)
+        else:
+            leg.get_frame().set_edgecolor('k')
+            # leg.get_frame().set_linewidth(1.0)
     plt.tight_layout()
     print('\t ... Saving figure ...')
     plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

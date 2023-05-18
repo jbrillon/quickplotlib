@@ -31,6 +31,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             title_label=" ",
             markers=False,
             legend_labels_tex=[],
+            leg_elements_input=[],
             black_lines=False,
             xlimits=[],ylimits=[],
             log_axes=None,
@@ -127,7 +128,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         lc = 'k' # set color to black
     
     color_index_shift = 0 
-    leg_elements = []
+    if(leg_elements_input == []):
+        leg_elements = []
 
     for i in range(0,ndata):
         if(black_lines):
@@ -183,7 +185,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                     plot_any_axes(plt.plot,x,y,lc,mk,ls)
         
         # add legend element 
-        if(legend_labels_tex!=[]):
+        if(legend_labels_tex!=[] and leg_elements_input==[]):
             leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
         
         # plot command
@@ -196,6 +198,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         elif(log_axes=="y"):
             plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
     if(legend_on):
+        if(leg_elements_input!=[]):
+            leg_elements=leg_elements_input
         if(legend_inside):
             if(legend_anchor!=[]):
                 leg = plt.legend(handles=leg_elements, loc=legend_location, bbox_to_anchor=(legend_anchor[0], legend_anchor[1]), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')

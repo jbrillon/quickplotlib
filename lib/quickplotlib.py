@@ -53,7 +53,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             axisTickLabel_FontSize=14,
             legend_fontSize=16,
             legend_location="best",
-            legend_anchor=[]):
+            legend_anchor=[],
+            second_leg_elements_input=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -217,6 +218,28 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         else:
             leg.get_frame().set_edgecolor('k')
             # leg.get_frame().set_linewidth(1.0)
+        ax.add_artist(leg)
+        if(second_leg_elements_input!=[]):
+            second_leg_elements=second_leg_elements_input
+            # legend_inside==True; legend_anchor==[]
+            if(legend_location=="upper left"):
+                second_legend_location="upper right"
+            elif(legend_location=="upper left"):
+                second_legend_location="upper right"
+            else:
+                second_legend_location="best"
+            second_leg = plt.legend(handles=second_leg_elements, loc=second_legend_location, ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            if(transparent_legend):
+                second_leg.get_frame().set_facecolor('None')
+            else:
+                leg.get_frame().set_facecolor('w')
+            if(not legend_border_on):
+                second_leg.get_frame().set_edgecolor('w')
+                second_leg.get_frame().set_linewidth(0.0)
+            else:
+                second_leg.get_frame().set_edgecolor('k')
+            ax.add_artist(second_leg)
+
     plt.tight_layout()
     print('\t ... Saving figure ...')
     plt.savefig(fig_directory+"/"+figure_filename+'.'+figure_filetype,format=figure_filetype,dpi=500)

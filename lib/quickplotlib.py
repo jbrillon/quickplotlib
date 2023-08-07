@@ -54,7 +54,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             legend_fontSize=16,
             legend_location="best",
             legend_anchor=[],
-            second_leg_elements_input=[]):
+            second_leg_elements_input=[],
+            second_leg_anchor=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -228,7 +229,12 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                 second_legend_location="upper right"
             else:
                 second_legend_location="best"
-            second_leg = plt.legend(handles=second_leg_elements, loc=second_legend_location, ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            # adding the legend to the plot
+            if(second_leg_anchor!=[]):
+                second_legend_location=legend_location # for same side
+                second_leg = plt.legend(handles=second_leg_elements, bbox_to_anchor=(second_leg_anchor[0], second_leg_anchor[1]), loc=second_legend_location, ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
+            else:
+                second_leg = plt.legend(handles=second_leg_elements, loc=second_legend_location, ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
             if(transparent_legend):
                 second_leg.get_frame().set_facecolor('None')
             else:

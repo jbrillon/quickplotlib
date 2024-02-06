@@ -25,6 +25,89 @@ def plot_any_axes(func,x,y,lc,mk,ls):
     # abstract plotting function to handle any kind of axes
     return func(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
 #-----------------------------------------------------
+def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
+    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+    markers,log_axes,lnstl_input,clr_input,mrkr_input,
+    error_bars_on_curve_number,yerr_below,yerr_above,
+    legend_labels_tex,leg_elements_input):
+    
+    leg_elements = []
+    ls = lnstl[0]  # default line style (ls)
+    lc = clr[0] # default line color (lc)
+    mk = 'None'
+    if(black_lines):
+        lc = 'k' # set color to black
+    
+    color_index_shift = 0 
+
+    for i in range(0,ndata):
+        if(black_lines):
+            ls = lnstl[i]
+            mk = 'None' # reset to default
+            if(i in which_lines_only_markers):
+                ls = 'None'
+                mk = mrkr[i]
+            elif(i in which_lines_markers):
+                mk = mrkr[i]
+        else:
+            # colour
+            if(clr_input!=[]):
+                lc = clr[i]
+            elif(i in which_lines_black):
+                lc = 'k'
+                color_index_shift += 1
+            else:
+                lc = clr[i-color_index_shift]
+                # warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
+                #          -- no issues when only one black line is specified
+            
+            # linestyle
+            if(lnstl_input!=[]):
+                ls = lnstl[i]
+            elif(i in which_lines_dashed):
+                ls = "dashed"
+            elif(i in which_lines_only_markers):
+                ls = 'None'
+            else:
+                ls = 'solid' # default
+            
+            # markers
+            if(mrkr_input!=[]):
+                mk = mrkr[i]
+            elif(i in which_lines_only_markers):
+                mk = mrkr[i]
+            elif(i in which_lines_markers):
+                mk = mrkr[i]
+            else:
+                mk = 'None' # reset to default
+
+        x = xdata[i]; y = ydata[i];
+        if(markers):
+            mk = mrkr[i]
+            if(log_axes==None):
+                if(error_bars_on_curve_number!=[] and i==error_bars_on_curve_number):
+                    yerr = np.array([yerr_below,yerr_above])
+                    fmt_string = lc+mrkr[i]
+                    plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
+                    # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
+                else:
+                    plot_any_axes(axes.plot,x,y,lc,mk,ls)
+
+        # add legend element 
+        if(legend_labels_tex!=[] and leg_elements_input==[]):
+            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+        
+        # plot command
+        if(log_axes==None):
+            plot_any_axes(axes.plot,x,y,lc,mk,ls)
+        elif(log_axes=="both"):
+            plot_any_axes(axes.loglog,x,y,lc,mk,ls)
+        elif(log_axes=="x"):
+            plot_any_axes(axes.semilogx,x,y,lc,mk,ls)
+        elif(log_axes=="y"):
+            plot_any_axes(axes.semilogy,x,y,lc,mk,ls)
+    return leg_elements
+#-----------------------------------------------------
 def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             figure_filename="myfig",
             figure_filetype="pdf",
@@ -55,7 +138,10 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             legend_location="best",
             legend_anchor=[],
             second_leg_elements_input=[],
-            second_leg_anchor=[]):
+            second_leg_anchor=[],
+            plot_zoomed_section=False,
+            x_limits_zoom=[],y_limits_zoom=[],
+            zoom_box_origin_and_extent=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -123,85 +209,18 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         ax.set_xlim(xlimits)
     if(ylimits!=[]):
         ax.set_ylim(ylimits)
-    ls = lnstl[0]  # default line style (ls)
-    lc = clr[0] # default line color (lc)
-    mk = 'None'
-    if(black_lines):
-        lc = 'k' # set color to black
     
-    color_index_shift = 0 
-    if(leg_elements_input == []):
-        leg_elements = []
+    leg_elements_plt = plot_lines(ax,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
+                    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+                    markers,log_axes,lnstl_input,clr_input,mrkr_input,
+                    error_bars_on_curve_number,yerr_below,yerr_above,
+                    legend_labels_tex,leg_elements_input)
 
-    for i in range(0,ndata):
-        if(black_lines):
-            ls = lnstl[i]
-            mk = 'None' # reset to default
-            if(i in which_lines_only_markers):
-                ls = 'None'
-                mk = mrkr[i]
-            elif(i in which_lines_markers):
-                mk = mrkr[i]
-        else:
-            # colour
-            if(clr_input!=[]):
-                lc = clr[i]
-            elif(i in which_lines_black):
-                lc = 'k'
-                color_index_shift += 1
-            else:
-                lc = clr[i-color_index_shift]
-                # warning: this color_index_shift could be buggy for when there's multiple desired black lines with colour ones
-                #          -- no issues when only one black line is specified
-            
-            # linestyle
-            if(lnstl_input!=[]):
-                ls = lnstl[i]
-            elif(i in which_lines_dashed):
-                ls = "dashed"
-            elif(i in which_lines_only_markers):
-                ls = 'None'
-            else:
-                ls = 'solid' # default
-            
-            # markers
-            if(mrkr_input!=[]):
-                mk = mrkr[i]
-            elif(i in which_lines_only_markers):
-                mk = mrkr[i]
-            elif(i in which_lines_markers):
-                mk = mrkr[i]
-            else:
-                mk = 'None' # reset to default
-
-        x = xdata[i]; y = ydata[i];
-        if(markers):
-            mk = mrkr[i]
-            if(log_axes==None):
-                if(error_bars_on_curve_number!=[] and i==error_bars_on_curve_number):
-                    yerr = np.array([yerr_below,yerr_above])
-                    fmt_string = lc+mrkr[i]
-                    plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
-                    # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
-                else:
-                    plot_any_axes(plt.plot,x,y,lc,mk,ls)
-        
-        # add legend element 
-        if(legend_labels_tex!=[] and leg_elements_input==[]):
-            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
-        
-        # plot command
-        if(log_axes==None):
-            plot_any_axes(plt.plot,x,y,lc,mk,ls)
-        elif(log_axes=="both"):
-            plot_any_axes(plt.loglog,x,y,lc,mk,ls)
-        elif(log_axes=="x"):
-            plot_any_axes(plt.semilogx,x,y,lc,mk,ls)
-        elif(log_axes=="y"):
-            plot_any_axes(plt.semilogy,x,y,lc,mk,ls)
     if(legend_on):
         if(leg_elements_input!=[]):
             leg_elements=leg_elements_input
+        else:
+            leg_elements=leg_elements_plt
         if(legend_inside):
             if(legend_anchor!=[]):
                 leg = plt.legend(handles=leg_elements, loc=legend_location, bbox_to_anchor=(legend_anchor[0], legend_anchor[1]), ncol=nlegendcols, shadow=False, fancybox=True, fontsize=legend_fontSize, framealpha=1.0,edgecolor='inherit')
@@ -245,6 +264,23 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             else:
                 second_leg.get_frame().set_edgecolor('k')
             ax.add_artist(second_leg)
+
+    if(plot_zoomed_section):
+        x_limits_zoom
+        x1, x2, y1, y2 = 7.5, 10.0, 0.010, 0.0135  # subregion of the original image
+        axins = ax.inset_axes(zoom_box_origin_and_extent,xticklabels=[], yticklabels=[])
+        axins.set_xlim(x_limits_zoom)
+        axins.set_ylim(y_limits_zoom)
+        axins.set_xticks([])
+        axins.set_yticks([])
+        
+        dummy = plot_lines(axins,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
+                        which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+                        markers,log_axes,lnstl_input,clr_input,mrkr_input,
+                        error_bars_on_curve_number,yerr_below,yerr_above,
+                        legend_labels_tex,leg_elements_input)
+
+        ax.indicate_inset_zoom(axins, edgecolor="black")
 
     plt.tight_layout()
     print('\t ... Saving figure ...')

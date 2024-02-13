@@ -266,20 +266,20 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             ax.add_artist(second_leg)
 
     if(plot_zoomed_section):
-        x_limits_zoom
-        x1, x2, y1, y2 = 7.5, 10.0, 0.010, 0.0135  # subregion of the original image
-        axins = ax.inset_axes(zoom_box_origin_and_extent,xticklabels=[], yticklabels=[])
+        axins = ax.inset_axes(zoom_box_origin_and_extent)
         axins.set_xlim(x_limits_zoom)
         axins.set_ylim(y_limits_zoom)
-        axins.set_xticks([])
-        axins.set_yticks([])
         
         dummy = plot_lines(axins,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
                         which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
                         markers,log_axes,lnstl_input,clr_input,mrkr_input,
                         error_bars_on_curve_number,yerr_below,yerr_above,
                         legend_labels_tex,leg_elements_input)
-
+        axins.set_xticks([])
+        axins.set_yticks([])
+        axins.set_xticklabels([])
+        axins.set_yticklabels([])
+        axins.minorticks_off()
         ax.indicate_inset_zoom(axins, edgecolor="black")
 
     plt.tight_layout()

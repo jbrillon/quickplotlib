@@ -141,7 +141,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             second_leg_anchor=[],
             plot_zoomed_section=False,
             x_limits_zoom=[],y_limits_zoom=[],
-            zoom_box_origin_and_extent=[]):
+            zoom_box_origin_and_extent=[],
+            vertical_lines=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -281,6 +282,10 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         axins.set_yticklabels([])
         axins.minorticks_off()
         ax.indicate_inset_zoom(axins, edgecolor="black")
+
+    if(vertical_lines!=[]):
+        for xv in vertical_lines:
+            plt.axvline(x=xv,linestyle="solid",color="k",alpha=0.5)
 
     plt.tight_layout()
     print('\t ... Saving figure ...')

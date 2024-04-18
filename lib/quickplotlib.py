@@ -21,15 +21,15 @@ matplotlibrc('font', family='serif')
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
-def plot_any_axes(func,x,y,lc,mk,ls):
+def plot_any_axes(func,x,y,lc,mk,ls,mrkr_size):
     # abstract plotting function to handle any kind of axes
-    return func(x, y, color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls)
+    return func(x, y, color=lc, marker=mk, markersize=mrkr_size, mfc='None', linestyle=ls)
 #-----------------------------------------------------
 def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
     which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
     markers,log_axes,lnstl_input,clr_input,mrkr_input,
     error_bars_on_curve_number,yerr_below,yerr_above,
-    legend_labels_tex,leg_elements_input):
+    legend_labels_tex,leg_elements_input,mrkr_size):
     
     leg_elements = []
     ls = lnstl[0]  # default line style (ls)
@@ -91,21 +91,21 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
                     plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
                     # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
                 else:
-                    plot_any_axes(axes.plot,x,y,lc,mk,ls)
+                    plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size)
 
         # add legend element 
         if(legend_labels_tex!=[] and leg_elements_input==[]):
-            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=6, mfc='None', linestyle=ls))
+            leg_elements.append(Line2D([0],[0], label=legend_labels_tex[i], color=lc, marker=mk, markersize=mrkr_size, mfc='None', linestyle=ls))
         
         # plot command
         if(log_axes==None):
-            plot_any_axes(axes.plot,x,y,lc,mk,ls)
+            plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size)
         elif(log_axes=="both"):
-            plot_any_axes(axes.loglog,x,y,lc,mk,ls)
+            plot_any_axes(axes.loglog,x,y,lc,mk,ls,mrkr_size)
         elif(log_axes=="x"):
-            plot_any_axes(axes.semilogx,x,y,lc,mk,ls)
+            plot_any_axes(axes.semilogx,x,y,lc,mk,ls,mrkr_size)
         elif(log_axes=="y"):
-            plot_any_axes(axes.semilogy,x,y,lc,mk,ls)
+            plot_any_axes(axes.semilogy,x,y,lc,mk,ls,mrkr_size)
     return leg_elements
 #-----------------------------------------------------
 def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
@@ -142,7 +142,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             plot_zoomed_section=False,
             x_limits_zoom=[],y_limits_zoom=[],
             zoom_box_origin_and_extent=[],
-            vertical_lines=[]):
+            vertical_lines=[],
+            marker_size=6):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -215,7 +216,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                     which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
                     markers,log_axes,lnstl_input,clr_input,mrkr_input,
                     error_bars_on_curve_number,yerr_below,yerr_above,
-                    legend_labels_tex,leg_elements_input)
+                    legend_labels_tex,leg_elements_input,marker_size)
 
     if(legend_on):
         if(leg_elements_input!=[]):
@@ -275,7 +276,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                         which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
                         markers,log_axes,lnstl_input,clr_input,mrkr_input,
                         error_bars_on_curve_number,yerr_below,yerr_above,
-                        legend_labels_tex,leg_elements_input)
+                        legend_labels_tex,leg_elements_input,marker_size)
         axins.set_xticks([])
         axins.set_yticks([])
         axins.set_xticklabels([])

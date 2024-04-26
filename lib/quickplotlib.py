@@ -21,12 +21,12 @@ matplotlibrc('font', family='serif')
 #-----------------------------------------------------
 # define functions
 #-----------------------------------------------------
-def plot_any_axes(func,x,y,lc,mk,ls,mrkr_size):
+def plot_any_axes(func,x,y,lc,mk,ls,mrkr_size,lw):
     # abstract plotting function to handle any kind of axes
-    return func(x, y, color=lc, marker=mk, markersize=mrkr_size, mfc='None', linestyle=ls)
+    return func(x, y, color=lc, marker=mk, markersize=mrkr_size, mfc='None', linestyle=ls, linewidth=lw)
 #-----------------------------------------------------
 def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
-    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,which_lines_dotted,which_lines_thin,
     markers,log_axes,lnstl_input,clr_input,mrkr_input,
     error_bars_on_curve_number,yerr_below,yerr_above,
     legend_labels_tex,leg_elements_input,mrkr_size):
@@ -35,6 +35,7 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
     ls = lnstl[0]  # default line style (ls)
     lc = clr[0] # default line color (lc)
     mk = 'None'
+    lw = 1.5 # default
     if(black_lines):
         lc = 'k' # set color to black
     
@@ -66,6 +67,8 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
                 ls = lnstl[i]
             elif(i in which_lines_dashed):
                 ls = "dashed"
+            elif(i in which_lines_dotted):
+                ls = "dotted"
             elif(i in which_lines_only_markers):
                 ls = 'None'
             else:
@@ -81,6 +84,12 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
             else:
                 mk = 'None' # reset to default
 
+            # linewidth
+            if(i in which_lines_thin):
+                lw = 0.5
+            else:
+                lw = 1.5 # default
+
         x = xdata[i]; y = ydata[i];
         if(markers):
             mk = mrkr[i]
@@ -91,7 +100,7 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
                     plt.errorbar(x, y, yerr, fmt=fmt_string, mfc='None')
                     # plt.errorbar(x, y, yerr, color=lc, marker=mrkr[i], markersize=6, mfc='None', linestyle='None')
                 else:
-                    plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size)
+                    plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size,lw)
 
         # add legend element 
         if(legend_labels_tex!=[] and leg_elements_input==[]):
@@ -99,13 +108,13 @@ def plot_lines(axes,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
         
         # plot command
         if(log_axes==None):
-            plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size)
+            plot_any_axes(axes.plot,x,y,lc,mk,ls,mrkr_size,lw)
         elif(log_axes=="both"):
-            plot_any_axes(axes.loglog,x,y,lc,mk,ls,mrkr_size)
+            plot_any_axes(axes.loglog,x,y,lc,mk,ls,mrkr_size,lw)
         elif(log_axes=="x"):
-            plot_any_axes(axes.semilogx,x,y,lc,mk,ls,mrkr_size)
+            plot_any_axes(axes.semilogx,x,y,lc,mk,ls,mrkr_size,lw)
         elif(log_axes=="y"):
-            plot_any_axes(axes.semilogy,x,y,lc,mk,ls,mrkr_size)
+            plot_any_axes(axes.semilogy,x,y,lc,mk,ls,mrkr_size,lw)
     return leg_elements
 #-----------------------------------------------------
 def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
@@ -122,6 +131,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             yerr_above=[],yerr_below=[],
             which_lines_black=[],
             which_lines_dashed=[],
+            which_lines_dotted=[],
+            which_lines_thin=[],
             nlegendcols=1,legend_on=True,legend_inside=True,
             remove_vertical_asymptotes_on_curve_number=[],
             which_lines_only_markers=[],
@@ -213,7 +224,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         ax.set_ylim(ylimits)
     
     leg_elements_plt = plot_lines(ax,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
-                    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+                    which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,which_lines_dotted,which_lines_thin,
                     markers,log_axes,lnstl_input,clr_input,mrkr_input,
                     error_bars_on_curve_number,yerr_below,yerr_above,
                     legend_labels_tex,leg_elements_input,marker_size)
@@ -273,7 +284,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         axins.set_ylim(y_limits_zoom)
         
         dummy = plot_lines(axins,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
-                        which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,
+                        which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,which_lines_dotted,which_lines_thin,
                         markers,log_axes,lnstl_input,clr_input,mrkr_input,
                         error_bars_on_curve_number,yerr_below,yerr_above,
                         legend_labels_tex,leg_elements_input,marker_size)

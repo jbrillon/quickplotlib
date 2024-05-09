@@ -295,6 +295,13 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         axins.set_yticklabels([])
         axins.minorticks_off()
         ax.indicate_inset_zoom(axins, edgecolor="black")
+        # axins.set_aspect('equal',anchor="NE")
+        if(vertical_lines!=[]):
+            for xv in vertical_lines:
+                axins.axvline(x=xv,linestyle="solid",color="k",alpha=0.5)
+        if(secondary_vertical_lines!=[]):
+            for xv in secondary_vertical_lines:
+                axins.axvline(x=xv,linestyle="dashed",color="k",alpha=0.5)
 
     if(vertical_lines!=[]):
         for xv in vertical_lines:

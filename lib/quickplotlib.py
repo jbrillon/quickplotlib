@@ -154,6 +154,7 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             x_limits_zoom=[],y_limits_zoom=[],
             zoom_box_origin_and_extent=[],
             vertical_lines=[],
+            secondary_vertical_lines=[],
             marker_size=6):
     print("---------------------------------------------")
     #-----------------------------------------------------
@@ -298,6 +299,9 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
     if(vertical_lines!=[]):
         for xv in vertical_lines:
             plt.axvline(x=xv,linestyle="solid",color="k",alpha=0.5)
+    if(secondary_vertical_lines!=[]):
+        for xv in secondary_vertical_lines:
+            plt.axvline(x=xv,linestyle="dashed",color="k",alpha=0.5)
 
     plt.tight_layout()
     print('\t ... Saving figure ...')

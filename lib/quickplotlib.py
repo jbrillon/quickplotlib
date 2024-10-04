@@ -153,6 +153,9 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             plot_zoomed_section=False,
             x_limits_zoom=[],y_limits_zoom=[],
             zoom_box_origin_and_extent=[],
+            plot_secondary_zoomed_section=False,
+            x_limits_secondary_zoom=[],y_limits_secondary_zoom=[],
+            secondary_zoom_box_origin_and_extent=[],
             vertical_lines=[],
             secondary_vertical_lines=[],
             marker_size=6):
@@ -283,6 +286,30 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
         axins = ax.inset_axes(zoom_box_origin_and_extent)
         axins.set_xlim(x_limits_zoom)
         axins.set_ylim(y_limits_zoom)
+        
+        dummy = plot_lines(axins,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
+                        which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,which_lines_dotted,which_lines_thin,
+                        markers,log_axes,lnstl_input,clr_input,mrkr_input,
+                        error_bars_on_curve_number,yerr_below,yerr_above,
+                        legend_labels_tex,leg_elements_input,marker_size)
+        axins.set_xticks([])
+        axins.set_yticks([])
+        axins.set_xticklabels([])
+        axins.set_yticklabels([])
+        axins.minorticks_off()
+        ax.indicate_inset_zoom(axins, edgecolor="black")
+        # axins.set_aspect('equal',anchor="NE")
+        if(vertical_lines!=[]):
+            for xv in vertical_lines:
+                axins.axvline(x=xv,linestyle="solid",color="k",alpha=0.5)
+        if(secondary_vertical_lines!=[]):
+            for xv in secondary_vertical_lines:
+                axins.axvline(x=xv,linestyle="dashed",color="k",alpha=0.5)
+
+    if(plot_secondary_zoomed_section):
+        axins = ax.inset_axes(secondary_zoom_box_origin_and_extent)
+        axins.set_xlim(x_limits_secondary_zoom)
+        axins.set_ylim(y_limits_secondary_zoom)
         
         dummy = plot_lines(axins,xdata,ydata,ndata,lnstl,clr,mrkr,black_lines,
                         which_lines_black,which_lines_only_markers,which_lines_markers,which_lines_dashed,which_lines_dotted,which_lines_thin,

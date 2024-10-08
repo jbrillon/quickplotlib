@@ -244,8 +244,8 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             # legend_inside==True; legend_anchor==[]
             if(legend_location=="upper left"):
                 second_legend_location="upper right"
-            elif(legend_location=="upper left"):
-                second_legend_location="upper right"
+            elif(legend_location=="upper right"):
+                second_legend_location="upper left"
             else:
                 second_legend_location="best"
             # adding the legend to the plot

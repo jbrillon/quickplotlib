@@ -158,7 +158,12 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
             secondary_zoom_box_origin_and_extent=[],
             vertical_lines=[],
             secondary_vertical_lines=[],
-            marker_size=6):
+            marker_size=6,
+            strings_for_textbox=[],
+            x_positions_for_textbox=[],
+            y_positions_for_textbox=[],
+            horizontal_alignment_for_textbox=[],
+            vertical_alignment_for_textbox=[]):
     print("---------------------------------------------")
     #-----------------------------------------------------
     # Safeguard for when empty data is passed
@@ -232,6 +237,15 @@ def plotfxn(xdata=[],ydata=[],ylabel="ydata",xlabel="xdata",
                     markers,log_axes,lnstl_input,clr_input,mrkr_input,
                     error_bars_on_curve_number,yerr_below,yerr_above,
                     legend_labels_tex,leg_elements_input,marker_size)
+
+    if(strings_for_textbox!=[]):
+        for i,text in enumerate(strings_for_textbox):
+            plt.text(x_positions_for_textbox[i],y_positions_for_textbox[i],text,
+                fontsize=legend_fontSize,alpha=1.0,
+                horizontalalignment=horizontal_alignment_for_textbox[i],
+                verticalalignment=vertical_alignment_for_textbox[i],
+                # backgroundcolor='white'
+                )
 
     if(legend_on):
         if(leg_elements_input!=[]):
